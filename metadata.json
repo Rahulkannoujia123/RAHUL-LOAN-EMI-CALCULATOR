@@ -1,0 +1,6 @@
+{
+  "name": "EMI Calculator & Loan Planner",
+  "description": "Advanced EMI calculator with prepayment planning, balance transfer comparison, loan eligibility, visual charts, amortization schedule export, and AI loan advisor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
