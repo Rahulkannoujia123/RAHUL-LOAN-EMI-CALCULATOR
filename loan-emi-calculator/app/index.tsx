@@ -1,137 +1,4 @@
-/**
- * Complete Expo React Native Project Source Export
- */
-
-export const EXPO_PACKAGE_JSON = `{
-  "name": "emipro",
-  "version": "1.0.0",
-  "main": "expo-router/entry",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "dependencies": {
-    "expo": "~51.0.0",
-    "expo-constants": "~16.0.2",
-    "expo-linking": "~6.3.1",
-    "expo-router": "~3.5.14",
-    "expo-status-bar": "~1.12.1",
-    "lucide-react-native": "^0.395.0",
-    "react": "18.2.0",
-    "react-native": "0.74.1",
-    "react-native-safe-area-context": "4.10.1",
-    "react-native-screens": "~3.31.1",
-    "react-native-svg": "15.2.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@types/react": "~18.2.45",
-    "typescript": "~5.3.3"
-  },
-  "private": true
-}`;
-
-export const EXPO_APP_JSON = `{
-  "expo": {
-    "name": "EMIPro",
-    "slug": "emipro",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#2563eb"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "package": "com.rahul.emipro",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#2563eb"
-      },
-      "permissions": [
-        "INTERNET"
-      ]
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-router"
-    ],
-    "scheme": "emipro"
-  }
-}`;
-
-export const EAS_JSON = `{
-  "cli": {
-    "version": ">= 10.0.0"
-  },
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
-    },
-    "production": {}
-  },
-  "submit": {
-    "production": {}
-  }
-}`;
-
-export const EXPO_LAYOUT_CODE = `import React from 'react';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-export default function RootLayout() {
-  return (
-    <SafeAreaProvider>
-      <StatusBar style="light" backgroundColor="#2563eb" />
-      <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#2563eb',
-          },
-          headerTintColor: '#ffffff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
-            title: 'EMIPro - Loan Calculator',
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen name="prepayment" options={{ title: 'Prepayment Savings' }} />
-        <Stack.Screen name="transfer" options={{ title: 'Balance Transfer' }} />
-        <Stack.Screen name="eligibility" options={{ title: 'Loan Eligibility' }} />
-        <Stack.Screen name="compare" options={{ title: 'Compare Tenures' }} />
-        <Stack.Screen name="advisor" options={{ title: 'AI Financial Advisor' }} />
-      </Stack>
-    </SafeAreaProvider>
-  );
-}`;
-
-export const EXPO_MAIN_INDEX_CODE = `import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -142,6 +9,7 @@ import {
   SafeAreaView,
   StatusBar,
   Dimensions,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { calculateLoanSummary, formatCurrency } from '../utils/calculatorUtils';
@@ -183,14 +51,14 @@ export default function MainEmiScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#2563eb" />
       
-      {/* Mobile Header */}
+      {/* Mobile Top Header */}
       <View style={styles.header}>
         <Text style={styles.appName}>EMIPro</Text>
         <Text style={styles.appSubtitle}>Smart Loan & Financial Planner</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Category selector */}
+        {/* Loan Type Category Selector */}
         <Text style={styles.sectionLabel}>SELECT LOAN CATEGORY</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
           {LOAN_TYPES.map((type) => {
@@ -209,11 +77,11 @@ export default function MainEmiScreen() {
           })}
         </ScrollView>
 
-        {/* Navigation Grid */}
+        {/* Feature Navigation Tabs */}
         <View style={styles.featureGrid}>
           <TouchableOpacity style={styles.featureBtn} onPress={() => router.push('/prepayment')}>
             <Text style={styles.featureIcon}>⚡</Text>
-            <Text style={styles.featureBtnText}>Prepay</Text>
+            <Text style={styles.featureBtnText}>Prepayment</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.featureBtn} onPress={() => router.push('/transfer')}>
             <Text style={styles.featureIcon}>🔄</Text>
@@ -243,6 +111,8 @@ export default function MainEmiScreen() {
             keyboardType="numeric"
             value={loanAmount}
             onChangeText={setLoanAmount}
+            placeholder="e.g. 35,00,000"
+            placeholderTextColor="#94a3b8"
           />
 
           <Text style={styles.inputLabel}>Interest Rate (% p.a.)</Text>
@@ -251,6 +121,8 @@ export default function MainEmiScreen() {
             keyboardType="decimal-pad"
             value={interestRate}
             onChangeText={setInterestRate}
+            placeholder="e.g. 8.5"
+            placeholderTextColor="#94a3b8"
           />
 
           <View style={styles.rowTwo}>
@@ -261,6 +133,8 @@ export default function MainEmiScreen() {
                 keyboardType="numeric"
                 value={tenureYears}
                 onChangeText={setTenureYears}
+                placeholder="20"
+                placeholderTextColor="#94a3b8"
               />
             </View>
             <View style={styles.colHalf}>
@@ -270,6 +144,8 @@ export default function MainEmiScreen() {
                 keyboardType="decimal-pad"
                 value={processingFeePct}
                 onChangeText={setProcessingFeePct}
+                placeholder="0.5"
+                placeholderTextColor="#94a3b8"
               />
             </View>
           </View>
@@ -279,6 +155,7 @@ export default function MainEmiScreen() {
         <View style={styles.resultCard}>
           <Text style={styles.resultHeader}>Monthly EMI</Text>
           <Text style={styles.emiAmount}>{formatCurrency(result.monthlyEmi)}</Text>
+          <Text style={styles.emiSubtext}>per month for {tenureVal * 12} months</Text>
 
           <View style={styles.divider} />
 
@@ -297,13 +174,23 @@ export default function MainEmiScreen() {
 
           <View style={[styles.statRow, { marginTop: 14 }]}>
             <View>
-              <Text style={styles.statLabel}>Processing Fee</Text>
+              <Text style={styles.statLabel}>Processing Fee ({processingFeePct}%)</Text>
               <Text style={styles.statValue}>{formatCurrency(result.totalProcessingFee)}</Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
               <Text style={styles.statLabel}>Total Payable</Text>
               <Text style={styles.statHighlight}>{formatCurrency(result.totalPayment)}</Text>
             </View>
+          </View>
+
+          {/* Breakdown progress bar */}
+          <View style={styles.progressContainer}>
+            <View style={[styles.progressBar, { width: `${result.ratioPrincipalPct}%`, backgroundColor: '#2563eb' }]} />
+            <View style={[styles.progressBar, { width: `${result.ratioInterestPct}%`, backgroundColor: '#f43f5e' }]} />
+          </View>
+          <View style={styles.legendRow}>
+            <Text style={styles.legendText}>🔵 Principal ({result.ratioPrincipalPct}%)</Text>
+            <Text style={styles.legendText}>🔴 Interest ({result.ratioInterestPct}%)</Text>
           </View>
         </View>
       </ScrollView>
@@ -312,43 +199,213 @@ export default function MainEmiScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8fafc' },
-  header: { backgroundColor: '#2563eb', paddingVertical: 18, paddingHorizontal: 20, borderBottomLeftRadius: 24, borderBottomRightRadius: 24 },
-  appName: { color: '#ffffff', fontSize: 24, fontWeight: '900' },
-  appSubtitle: { color: '#bfdbfe', fontSize: 12, fontWeight: '600', marginTop: 2 },
-  scrollContent: { padding: 16, paddingBottom: 40 },
-  sectionLabel: { fontSize: 11, fontWeight: '800', color: '#64748b', letterSpacing: 1, marginBottom: 8 },
-  categoryScroll: { marginBottom: 16 },
-  categoryChip: { backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20, marginRight: 8 },
-  categoryChipActive: { backgroundColor: '#2563eb', borderColor: '#2563eb' },
-  categoryText: { color: '#475569', fontSize: 13, fontWeight: '700' },
-  categoryTextActive: { color: '#ffffff' },
-  featureGrid: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 },
-  featureBtn: { backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderWidth: 1, borderRadius: 14, paddingVertical: 10, paddingHorizontal: 8, alignItems: 'center', flex: 1, marginHorizontal: 2 },
-  featureIcon: { fontSize: 16, marginBottom: 2 },
-  featureBtnText: { fontSize: 9, fontWeight: '700', color: '#334155' },
-  card: { backgroundColor: '#ffffff', borderRadius: 20, padding: 18, borderColor: '#e2e8f0', borderWidth: 1, marginBottom: 16 },
-  cardHeader: { fontSize: 15, fontWeight: '800', color: '#0f172a', marginBottom: 10 },
-  inputLabel: { fontSize: 12, fontWeight: '700', color: '#475569', marginBottom: 4, marginTop: 8 },
-  textInput: { backgroundColor: '#f1f5f9', borderColor: '#cbd5e1', borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, fontSize: 15, fontWeight: '700', color: '#0f172a' },
-  rowTwo: { flexDirection: 'row', justifyContent: 'space-between' },
-  colHalf: { width: '48%' },
-  resultCard: { backgroundColor: '#2563eb', borderRadius: 24, padding: 20 },
-  resultHeader: { color: '#bfdbfe', fontSize: 12, fontWeight: '800', textTransform: 'uppercase' },
-  emiAmount: { color: '#ffffff', fontSize: 34, fontWeight: '900', marginTop: 4 },
-  divider: { height: 1, backgroundColor: '#60a5fa', marginVertical: 16 },
-  statRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  statLabel: { color: '#bfdbfe', fontSize: 11, fontWeight: '600' },
-  statValue: { color: '#ffffff', fontSize: 15, fontWeight: '800', marginTop: 2 },
-  statHighlight: { color: '#ffffff', fontSize: 16, fontWeight: '900', marginTop: 2 },
-});`;
-
-export function downloadFile(filename: string, text: string) {
-  const element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
-  element.style.display = 'none';
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
-}
+  container: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
+  },
+  header: {
+    backgroundColor: '#2563eb',
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    shadowColor: '#1e40af',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  appName: {
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: '900',
+    letterSpacing: 0.5,
+  },
+  appSubtitle: {
+    color: '#bfdbfe',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 40,
+  },
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#64748b',
+    letterSpacing: 1,
+    marginBottom: 8,
+    marginTop: 4,
+  },
+  categoryScroll: {
+    marginBottom: 16,
+  },
+  categoryChip: {
+    backgroundColor: '#ffffff',
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  categoryChipActive: {
+    backgroundColor: '#2563eb',
+    borderColor: '#2563eb',
+  },
+  categoryText: {
+    color: '#475569',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  categoryTextActive: {
+    color: '#ffffff',
+  },
+  featureGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  featureBtn: {
+    backgroundColor: '#ffffff',
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    width: (width - 48) / 5,
+  },
+  featureIcon: {
+    fontSize: 16,
+    marginBottom: 2,
+  },
+  featureBtnText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#334155',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 18,
+    borderColor: '#e2e8f0',
+    borderWidth: 1,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  cardHeader: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#0f172a',
+    marginBottom: 14,
+  },
+  inputLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#475569',
+    marginBottom: 6,
+    marginTop: 10,
+  },
+  textInput: {
+    backgroundColor: '#f1f5f9',
+    borderColor: '#cbd5e1',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0f172a',
+  },
+  rowTwo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  colHalf: {
+    width: '48%',
+  },
+  resultCard: {
+    backgroundColor: '#2563eb',
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: '#2563eb',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  resultHeader: {
+    color: '#bfdbfe',
+    fontSize: 12,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  emiAmount: {
+    color: '#ffffff',
+    fontSize: 34,
+    fontWeight: '900',
+    marginTop: 4,
+  },
+  emiSubtext: {
+    color: '#dbeafe',
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#60a5fa',
+    marginVertical: 16,
+  },
+  statRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  statLabel: {
+    color: '#bfdbfe',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  statValue: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '800',
+    marginTop: 2,
+  },
+  statHighlight: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '900',
+    marginTop: 2,
+  },
+  progressContainer: {
+    height: 8,
+    borderRadius: 4,
+    flexDirection: 'row',
+    overflow: 'hidden',
+    marginTop: 18,
+    backgroundColor: '#1e40af',
+  },
+  progressBar: {
+    height: '100%',
+  },
+  legendRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  legendText: {
+    color: '#dbeafe',
+    fontSize: 10,
+    fontWeight: '700',
+  },
+});
